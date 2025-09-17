@@ -1,1 +1,14 @@
-
+export default function Services() {
+  return (
+    <section style={{ padding: "2rem" }}>
+      <h1>Our Services</h1>
+      <p>Browse the local services available in Llantrisant:</p>
+      <ul>
+        <li>Cleaning</li>
+        <li>Gardening</li>
+        <li>Tradespeople</li>
+        <li>Professional Services</li>
+      </ul>
+    </section>
+  );
+}
