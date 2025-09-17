@@ -1,18 +1,67 @@
+"use client";
+
+import { useState } from "react";
+
 export default function Contact() {
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("Sending...");
+
+    const res = await fetch("/api/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    if (res.ok) {
+      setStatus("✅ Message sent! We'll reply soon.");
+      setFormData({ name: "", email: "", message: "" });
+    } else {
+      setStatus("❌ Something went wrong. Try again.");
+    }
+  };
+
   return (
     <section style={{ padding: "2rem" }}>
       <h1>Contact Us</h1>
-      <p>We’d love to hear from you! Get in touch using the details below:</p>
-      
-      <ul>
-        <li>Email: llantrisantlocal@gmail.com</li>
-        <li>Phone: 07400 123456</li>
-        <li>Location: Llantrisant, South Wales</li>
-      </ul>
+      <p>Fill in the form below to send us a message:</p>
 
-      <p style={{ marginTop: "1rem" }}>
-        Or use our enquiry form coming soon on this page.
-      </p>
+      <form onSubmit={handleSubmit} style={{ display: "grid", gap: "1rem", maxWidth: "400px" }}>
+        <input
+          type="text"
+          name="name"
+          placeholder="Your Name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Your Email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+        <textarea
+          name="message"
+          placeholder="Your Message"
+          value={formData.message}
+          onChange={handleChange}
+          required
+          rows={5}
+        />
+        <button type="submit">Send Message</button>
+      </form>
+
+      {status && <p style={{ marginTop: "1rem" }}>{status}</p>}
     </section>
   );
 }
