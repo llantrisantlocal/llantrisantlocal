@@ -1,27 +1,46 @@
-import nodemailer from "nodemailer";
+"use client";
 
-export async function POST(req: Request) {
-  const { name, email, message } = await req.json();
+import { useState } from "react";
 
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+export default function Contact() {
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState("");
 
-  try {
-    await transporter.sendMail({
-      from: `"${name}" <${email}>`,
-      to: process.env.EMAIL_USER,
-      subject: "New Contact Form Message",
-      text: message,
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("Sending...");
+
+    const res = await fetch("/api/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
     });
 
-    return new Response(JSON.stringify({ success: true }), { status: 200 });
-  } catch (err) {
-    console.error(err);
-    return new Response(JSON.stringify({ success: false }), { status: 500 });
-  }
+    if (res.ok) {
+      setStatus("✅ Message sent! We'll reply soon.");
+      setFormData({ name: "", email: "", message: "" });
+    } else {
+      setStatus("❌ Something went wrong. Try again.");
+    }
+  };
+
+  return (
+    <section style={{ padding: "2rem" }}>
+      <h1>Contact Us</h1>
+      <p>Fill in the form below to send us a message:</p>
+
+      <form onSubmit={handleSubmit} style={{ display: "grid", gap: "1rem", maxWidth: "400px" }}>
+        <input name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} required />
+        <input type="email" name="email" placeholder="Your Email" value={formData.email} onChange={handleChange} required />
+        <textarea name="message" placeholder="Your Message" value={formData.message} onChange={handleChange} rows={5} required />
+        <button type="submit">Send Message</button>
+      </form>
+
+      {status && <p style={{ marginTop: "1rem" }}>{status}</p>}
+    </section>
+  );
 }
