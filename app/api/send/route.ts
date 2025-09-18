@@ -8,8 +8,10 @@ export async function POST(req: Request) {
   try {
     const { name, email, message, _hp } = await req.json();
 
-    // Honeypot: if bots fill this hidden field, accept silently
-    if (_hp) return NextResponse.json({ success: true });
+    // Honeypot spam check
+    if (_hp) {
+      return NextResponse.json({ success: false, error: "Spam detected" });
+    }
 
     if (!name || !email || !message) {
       return NextResponse.json({ success: false, error: "Missing fields" });
@@ -30,14 +32,18 @@ export async function POST(req: Request) {
       to: process.env.EMAIL_USER,
       subject: `New message from ${name}`,
       text: message,
-      html: `<p><strong>Name:</strong> ${name}</p>
-             <p><strong>Email:</strong> ${email}</p>
-             <p><strong>Message:</strong><br/>${message}</p>`,
+      html: `
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message.replace(/\n/g, "<br/>")}</p>
+      `,
       replyTo: email,
     });
 
     return NextResponse.json({ success: true });
-  } catch (err) {
+  } catch (err: any) {
     console.error("Email error:", err);
     return NextResponse.json({ success: false, error: "Failed to send email" });
   }
