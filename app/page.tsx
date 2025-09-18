@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
+import Tile from "./components/Tile";
 
 export default function Home() {
   return (
-    <main style={{ color: "#0a0a0a" }}>
+    <main>
       {/* HERO */}
       <section
         style={{
@@ -14,13 +15,12 @@ export default function Home() {
           borderRadius: 16,
           overflow: "hidden",
           margin: "16px",
-          background: "#111", // fallback if no image
+          background: "#000",
         }}
       >
-        {/* Background image (won’t capture clicks) */}
         <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
           <Image
-            src="/tiles/aircon.jpg" // ok if missing; the fallback shows
+            src="/tiles/aircon.jpg"
             alt=""
             fill
             sizes="100vw"
@@ -31,16 +31,13 @@ export default function Home() {
               position: "absolute",
               inset: 0,
               background:
-                "linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%)",
+                "linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.65) 100%)",
             }}
           />
         </div>
 
-        {/* Foreground content */}
         <div style={{ position: "relative", zIndex: 1, padding: 20, color: "white" }}>
-          <h1 style={{ margin: 0, fontSize: "28px", lineHeight: 1.2 }}>
-            LLANTRISANT LOCAL
-          </h1>
+          <h1 style={{ margin: 0, fontSize: 28, lineHeight: 1.2 }}>LLANTRISANT LOCAL</h1>
           <p style={{ margin: "8px 0 12px", opacity: 0.9 }}>
             A town that’s built on a hill cannot be hidden.
           </p>
@@ -61,39 +58,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* QUICK LINKS */}
+      {/* TILES */}
       <section
         style={{
           padding: "0 16px 24px",
           display: "grid",
-          gap: 12,
+          gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+          gap: 16,
         }}
       >
-        <NavLink href="/directory" label="Directory" />
-        <NavLink href="/services" label="Services" />
-        <NavLink href="/deals" label="Deals" />
-        <NavLink href="/contact" label="Contact" />
+        <Tile href="/directory" title="Directory" img="/tiles/directory.jpg" fallback="#0ea5e9" />
+        <Tile href="/services" title="Services" img="/tiles/services.jpg" fallback="#22c55e" />
+        <Tile href="/deals" title="Deals" img="/tiles/deals.jpg" fallback="#ef4444" />
+        <Tile href="/contact" title="Contact" img="/tiles/contact.jpg" fallback="#a78bfa" />
+        <Tile href="/ipw-climatech" title="IPW Climatech" img="/tiles/aircon.jpg" fallback="#14b8a6" />
       </section>
     </main>
-  );
-}
-
-function NavLink({ href, label }: { href: string; label: string }) {
-  return (
-    <Link
-      href={href}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 8,
-        textDecoration: "none",
-        fontWeight: 700,
-        fontSize: "20px",
-        color: "#4c1d95", // purple
-      }}
-    >
-      <span>{label}</span>
-      <span aria-hidden>→</span>
-    </Link>
   );
 }
