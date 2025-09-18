@@ -1,3 +1,4 @@
+import ServiceCard from "../components/ServiceCard";
 export default function Services() {
   return (
     <section style={{ padding: "20px" }}>
