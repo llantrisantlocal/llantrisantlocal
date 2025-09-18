@@ -8,8 +8,8 @@ export async function POST(req: Request) {
   try {
     const { name, email, message, _hp } = await req.json();
 
-    // Honeypot check - if filled, it's spam → silently ignore
-    if (_hp && _hp.trim() !== "") {
+    // Honeypot check (if bot fills the hidden field, reject silently)
+    if (_hp) {
       return NextResponse.json({ success: true });
     }
 
@@ -31,7 +31,10 @@ export async function POST(req: Request) {
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
       subject: `New message from ${name}`,
-      text: `From: ${name} <${email}>\n\n${message}`,
+      text: message,
+      html: `<p><strong>Name:</strong> ${name}</p>
+             <p><strong>Email:</strong> ${email}</p>
+             <p><strong>Message:</strong><br/>${message}</p>`,
       replyTo: email,
     });
 
