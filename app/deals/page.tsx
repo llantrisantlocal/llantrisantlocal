@@ -20,7 +20,7 @@ export default function DealsPage() {
         <Tile
           href="/ipw-climatech"
           title="£10 off vehicle A/C re-gas"
-          src="/tiles/aircon"        // no extension needed; Tile resolves .jpg/.jpeg
+          src="/tiles/aircon"     // <- src, not img
           fallback="#ef4444"
         />
       </div>
