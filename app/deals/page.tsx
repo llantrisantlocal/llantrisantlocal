@@ -1,34 +1,30 @@
-// app/deals/page.tsx
 import Tile from "../components/Tile";
-import Link from "next/link";
 
 export default function DealsPage() {
   return (
-    <main style={{ padding: 20 }}>
-      <h1 style={{ fontSize: 28, marginBottom: 8 }}>Deals</h1>
-      <p style={{ marginBottom: 16 }}>
-        Local offers and discounts from businesses around Llantrisant.
+    <section style={{ padding: 16 }}>
+      <h1 style={{ fontSize: 28, marginBottom: 12 }}>Deals</h1>
+      <p style={{ marginBottom: 16, color: "#64748b" }}>
+        Local offers and discounts around Llantrisant.
       </p>
 
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
           gap: 16,
         }}
       >
         <Tile
           href="/ipw-climatech"
           title="£10 off vehicle A/C re-gas"
-          src="/tiles/aircon"     // <- src, not img
+          src="/tiles/aircon"          // ← NO extension required; .jpg/.jpeg both ok
           fallback="#ef4444"
         />
+        {/* Example placeholder offers */}
+        <Tile href="/directory" title="Local café: free cookie" fallback="#0ea5e9" />
+        <Tile href="/directory" title="Barber: 2 for 1 Tues" fallback="#22c55e" />
       </div>
-
-      <p style={{ marginTop: 24 }}>
-        Are you a local business with a special offer?{" "}
-        <Link href="/contact">Get in touch</Link>.
-      </p>
-    </main>
+    </section>
   );
 }
