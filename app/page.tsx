@@ -1,9 +1,10 @@
 import Link from "next/link";
+import Tile from "./components/Tile";
 
 export default function Home() {
   return (
     <main>
-      {/* HERO with JPEG/JPG fallback */}
+      {/* HERO */}
       <section
         style={{
           position: "relative",
@@ -12,22 +13,14 @@ export default function Home() {
           alignItems: "flex-end",
           borderRadius: 16,
           overflow: "hidden",
-          margin: "16px",
+          margin: 16,
           background: "#000",
         }}
       >
-        {/* Raw <picture> so we can provide two sources and avoid Next/Image issues */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            pointerEvents: "none",
-          }}
-        >
+        {/* Background image with jpeg/jpg fallback */}
+        <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
           <picture>
-            {/* Try .jpeg first */}
             <source srcSet="/tiles/aircon.jpeg" />
-            {/* Fallback to .jpg if .jpeg isn’t there */}
             <img
               src="/tiles/aircon.jpg"
               alt=""
@@ -40,14 +33,12 @@ export default function Home() {
               }}
             />
           </picture>
-
-          {/* Dark gradient overlay */}
           <div
             style={{
               position: "absolute",
               inset: 0,
               background:
-                "linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.65) 100%)",
+                "linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.65) 100%)",
             }}
           />
         </div>
@@ -74,7 +65,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SIMPLE TILES (no images; won’t break build) */}
+      {/* COLOURFUL GRID */}
       <section
         style={{
           padding: "0 16px 24px",
@@ -83,29 +74,41 @@ export default function Home() {
           gap: 16,
         }}
       >
-        {[
-          { href: "/directory", title: "Directory" },
-          { href: "/services", title: "Services" },
-          { href: "/deals", title: "Deals" },
-          { href: "/contact", title: "Contact" },
-          { href: "/ipw-climatech", title: "IPW Climatech" },
-        ].map((t) => (
-          <Link
-            key={t.href}
-            href={t.href}
-            style={{
-              display: "block",
-              background: "#111",
-              color: "white",
-              textDecoration: "none",
-              borderRadius: 16,
-              padding: 16,
-            }}
-          >
-            <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 6 }}>{t.title}</div>
-            <div style={{ opacity: 0.8, fontSize: 13 }}>Explore →</div>
-          </Link>
-        ))}
+        <Tile
+          href="/directory"
+          title="Directory"
+          src="/tiles/directory"
+          fallback="#0ea5e9" // sky
+          subtitle="Explore →"
+        />
+        <Tile
+          href="/services"
+          title="Services"
+          src="/tiles/services"
+          fallback="#22c55e" // green
+          subtitle="Explore →"
+        />
+        <Tile
+          href="/deals"
+          title="Deals"
+          src="/tiles/deals"
+          fallback="#ef4444" // red
+          subtitle="Save now →"
+        />
+        <Tile
+          href="/contact"
+          title="Contact"
+          src="/tiles/contact"
+          fallback="#a78bfa" // violet
+          subtitle="Get in touch →"
+        />
+        <Tile
+          href="/ipw-climatech"
+          title="IPW Climatech"
+          src="/tiles/aircon"
+          fallback="#14b8a6" // teal
+          subtitle="Book a service →"
+        />
       </section>
     </main>
   );
