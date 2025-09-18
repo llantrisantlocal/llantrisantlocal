@@ -4,57 +4,75 @@ import Image from "next/image";
 type TileProps = {
   href: string;
   title: string;
-  img: string; // base path, e.g. "/tiles/aircon"
-  fallback: string;
+  img: string;      // base path, e.g. "/tiles/aircon" (NO extension)
+  fallback: string; // solid colour (e.g. "#0ea5e9")
 };
 
-// Helper: prefer .jpeg, fallback to .jpg
-function imagePath(base: string) {
+// Prefer .jpeg, fallback .jpg. On server we can’t check, so default to .jpeg.
+// If the image isn’t there, the tile still looks fine thanks to the fallback bg + overlay.
+function resolveSrc(base: string) {
   if (typeof window !== "undefined") {
     const jpeg = `${base}.jpeg`;
     const jpg = `${base}.jpg`;
-
-    const img = new Image();
-    img.src = jpeg;
-    if (img.complete || img.width > 0) return jpeg;
-
+    const test = new Image();
+    test.src = jpeg;
+    if (test.complete || test.naturalWidth > 0) return jpeg;
     return jpg;
   }
-  // server-side default
   return `${base}.jpeg`;
 }
 
 export default function Tile({ href, title, img, fallback }: TileProps) {
+  const src = resolveSrc(img);
+
   return (
     <Link
       href={href}
       style={{
+        position: "relative",
         display: "block",
+        height: 140,
         borderRadius: 12,
         overflow: "hidden",
-        background: fallback,
+        background: fallback, // safe fallback even if image 404s
         color: "white",
         textDecoration: "none",
       }}
     >
-      <div style={{ position: "relative", height: 120 }}>
-        <Image
-          src={imagePath(img.replace(/\.(jpeg|jpg)$/i, ""))}
-          alt={title}
-          fill
-          sizes="200px"
-          style={{ objectFit: "cover", opacity: 0.85 }}
-        />
+      {/* BG image (won’t intercept clicks) */}
+      <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
+        {src ? (
+          <Image
+            src={src}
+            alt=""
+            fill
+            sizes="200px"
+            style={{ objectFit: "cover", opacity: 0.6 }}
+          />
+        ) : null}
         <div
           style={{
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%)",
+              "linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.6) 100%)",
           }}
         />
       </div>
-      <div style={{ padding: "8px 12px", fontWeight: 600, fontSize: 16 }}>
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: 10,
+          left: 12,
+          right: 12,
+          zIndex: 1,
+          fontWeight: 800,
+          letterSpacing: 0.3,
+          fontSize: 16,
+          textShadow: "0 1px 2px rgba(0,0,0,.5)",
+        }}
+      >
         {title}
       </div>
     </Link>
