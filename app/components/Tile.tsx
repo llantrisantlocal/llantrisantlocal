@@ -5,35 +5,29 @@ import Image from "next/image";
 type Props = {
   href: string;
   title: string;
-  img?: string;     // optional: shows color fallback if missing
-  fallback?: string;
-  height?: number;
+  img?: string;     // optional background image
+  fallback?: string; // fallback colour if no image
 };
 
-export default function Tile({
-  href,
-  title,
-  img,
-  fallback = "#111827",
-  height = 140,
-}: Props) {
+export default function Tile({ href, title, img, fallback = "#1a1a1a" }: Props) {
   return (
     <Link
       href={href}
       style={{
         position: "relative",
         display: "block",
-        height,
-        borderRadius: 16,
+        height: 140,
+        borderRadius: 12,
         overflow: "hidden",
         background: fallback,
         color: "white",
+        fontWeight: "bold",
         textDecoration: "none",
       }}
     >
-      {/* background image – not clickable */}
-      <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-        {img ? (
+      {/* background image if available */}
+      {img && (
+        <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
           <Image
             src={img}
             alt=""
@@ -41,27 +35,25 @@ export default function Tile({
             sizes="200px"
             style={{ objectFit: "cover", opacity: 0.6 }}
           />
-        ) : null}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background:
-              "linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.6) 100%)",
-          }}
-        />
-      </div>
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.6) 100%)",
+            }}
+          />
+        </div>
+      )}
 
+      {/* text label */}
       <div
         style={{
           position: "absolute",
           bottom: 10,
           left: 12,
-          right: 12,
           zIndex: 1,
-          fontWeight: 800,
-          letterSpacing: 0.3,
-          fontSize: 18,
+          fontSize: 16,
           textShadow: "0 1px 2px rgba(0,0,0,.5)",
         }}
       >
