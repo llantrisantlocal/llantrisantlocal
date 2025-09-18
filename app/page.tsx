@@ -20,7 +20,7 @@ export default function Home() {
       >
         <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
           <Image
-            src="/tiles/aircon.jpg"
+            src="/tiles/aircon.jpeg"
             alt=""
             fill
             sizes="100vw"
@@ -67,11 +67,11 @@ export default function Home() {
           gap: 16,
         }}
       >
-        <Tile href="/directory" title="Directory" img="/tiles/directory.jpg" fallback="#0ea5e9" />
-        <Tile href="/services" title="Services" img="/tiles/services.jpg" fallback="#22c55e" />
-        <Tile href="/deals" title="Deals" img="/tiles/deals.jpg" fallback="#ef4444" />
-        <Tile href="/contact" title="Contact" img="/tiles/contact.jpg" fallback="#a78bfa" />
-        <Tile href="/ipw-climatech" title="IPW Climatech" img="/tiles/aircon.jpg" fallback="#14b8a6" />
+        <Tile href="/directory" title="Directory" img="/tiles/directory.jpeg" fallback="#0ea5e9" />
+        <Tile href="/services" title="Services" img="/tiles/services.jpeg" fallback="#22c55e" />
+        <Tile href="/deals" title="Deals" img="/tiles/deals.jpeg" fallback="#ef4444" />
+        <Tile href="/contact" title="Contact" img="/tiles/contact.jpeg" fallback="#a78bfa" />
+        <Tile href="/ipw-climatech" title="IPW Climatech" img="/tiles/aircon.jpeg" fallback="#14b8a6" />
       </section>
     </main>
   );
