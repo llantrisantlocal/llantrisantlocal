@@ -7,28 +7,28 @@ import nodemailer from "nodemailer";
 
 export async function POST(req: Request) {
   try {
-    const { name, email, message } = await req.json();
+    const { name, email, message, _hp } = await req.json();
 
-    // Basic validation
-    if (!name || !email || !message) {
-      return NextResponse.json(
-        { success: false, error: "Missing fields" },
-        { status: 400 }
-      );
+    // Honeypot field: if present, treat as spam
+    if (_hp) {
+      return NextResponse.json({ success: true });
     }
 
-    // Tiny rate limit: 1 request / 60s per browser
-    const cookieStore = cookies();
+    if (!name || !email || !message) {
+      return NextResponse.json({ success: false, error: "Missing fields" }, { status: 400 });
+    }
+
+    // Simple cookie-based throttle: 1 message / 60s
+    const cookieStore = cookies(); // <-- note the ()
     const lastSent = cookieStore.get("lastSent")?.value;
     const now = Date.now();
     if (lastSent && now - Number(lastSent) < 60_000) {
       return NextResponse.json(
-        { success: false, error: "Please wait a minute before sending again." },
+        { success: false, error: "Too many requests. Please wait a moment." },
         { status: 429 }
       );
     }
 
-    // Email transport (Gmail SMTP)
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
@@ -47,21 +47,12 @@ export async function POST(req: Request) {
       replyTo: email,
     });
 
-    // Success response + set rate-limit cookie
     const res = NextResponse.json({ success: true });
-    res.cookies.set("lastSent", String(now), {
-      maxAge: 60, // seconds
-      path: "/",
-      httpOnly: true,
-      sameSite: "lax",
-      secure: true,
-    });
+    // Set/update the throttle cookie
+    res.cookies.set("lastSent", String(now), { maxAge: 60, path: "/" });
     return res;
   } catch (err) {
     console.error("Email error:", err);
-    return NextResponse.json(
-      { success: false, error: "Failed to send email" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Failed to send email" }, { status: 500 });
   }
 }
