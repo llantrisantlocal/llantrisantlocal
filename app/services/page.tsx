@@ -1,21 +1,31 @@
-import ServiceCard from "../components/ServiceCard";
+import Tile from "../components/Tile";
 
-export default function Services() {
+export default function ServicesPage() {
   return (
-    <section style={{ padding: "20px" }}>
-      <h1 style={{ fontSize: 28, marginBottom: 8 }}>Services</h1>
-      <p>Here you’ll find a list of local services.</p>
+    <section style={{ padding: 16 }}>
+      {/* Featured (your business) */}
+      <Tile
+        href="/ipw-climatech"
+        title="IPW Climatech — Automotive A/C"
+        img="/tiles/aircon"
+        fallback="#14b8a6"
+      />
 
-      <ul style={{ marginTop: 14, lineHeight: 1.6, paddingLeft: 0, listStyle: "none" }}>
-        <ServiceCard
-          title="Automotive Air Conditioning"
-          desc="Re-gas, leak test, odour treatment & diagnostics for cars and vans (mobile)."
-        />
-        <ServiceCard
-          title="Coming soon: Domestic A/C"
-          desc="Split-system installs and maintenance from late November (post-qualification)."
-        />
-      </ul>
+      <h2 style={{ marginTop: 16, marginBottom: 8, fontSize: 20, fontWeight: 700 }}>
+        Other Services
+      </h2>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
+          gap: 14,
+        }}
+      >
+        <Tile href="/directory/cleaning"  title="Cleaning"  img="/tiles/services" fallback="#22c55e" />
+        <Tile href="/directory/gardening" title="Gardening" img="/tiles/services" fallback="#16a34a" />
+        <Tile href="/directory/trades"    title="Trades"    img="/tiles/services" fallback="#f59e0b" />
+      </div>
     </section>
   );
 }
