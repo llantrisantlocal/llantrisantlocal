@@ -1,11 +1,12 @@
+// app/ipw-climatech/page.tsx
+
 export default function IPWClimatechPage() {
   return (
-    <section style={{ padding: 16 }}>
-      {/* Banner with JPEG/JPG fallback */}
+    <main style={{ padding: 16 }}>
       <div
         style={{
           position: "relative",
-          height: 180,
+          height: 200,
           borderRadius: 16,
           overflow: "hidden",
           background: "#000",
@@ -21,7 +22,7 @@ export default function IPWClimatechPage() {
               width: "100%",
               height: "100%",
               objectFit: "cover",
-              opacity: 0.5,
+              opacity: 0.55,
               display: "block",
             }}
           />
@@ -35,7 +36,7 @@ export default function IPWClimatechPage() {
             margin: 0,
             color: "white",
             fontSize: 28,
-            textShadow: "0 2px 8px rgba(0,0,0,0.6)",
+            textShadow: "0 2px 6px rgba(0,0,0,0.7)",
           }}
         >
           IPW Climatech
@@ -48,8 +49,8 @@ export default function IPWClimatechPage() {
       </p>
 
       <p style={{ fontSize: 16, lineHeight: 1.6 }}>
-        <strong>Coming late November:</strong> domestic split-system installs and
-        maintenance (following qualification).
+        <strong>Coming late November:</strong> domestic split-system installs
+        and maintenance (following qualification).
       </p>
 
       <a
@@ -62,11 +63,11 @@ export default function IPWClimatechPage() {
           borderRadius: 10,
           textDecoration: "none",
           fontWeight: 700,
-          marginTop: 8,
+          marginTop: 12,
         }}
       >
         Book a service
       </a>
-    </section>
+    </main>
   );
 }
