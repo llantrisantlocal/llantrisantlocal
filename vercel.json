@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "app/api/send/route.ts": {
-      "runtime": "nodejs18.x"
-    }
-  }
-}
