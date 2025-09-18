@@ -1,39 +1,61 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { useMemo, useState } from "react";
 
 interface TileProps {
   href: string;
   title: string;
-  src?: string;       // ✅ allow src (jpg/jpeg/png etc.)
-  fallback: string;
+  /** preferred prop */
+  src?: string;          // "/tiles/aircon" or "/tiles/aircon.jpg"
+  /** legacy prop (still supported) */
+  img?: string;          // "/tiles/aircon" or "/tiles/aircon.jpg"
+  fallback: string;      // colour
 }
 
-export default function Tile({ href, title, src, fallback }: TileProps) {
+function normalizeBasePath(p?: string) {
+  if (!p) return "";
+  // strip extension if present; we'll add .jpeg then fallback to .jpg
+  return p.replace(/\.(jpeg|jpg)$/i, "");
+}
+
+export default function Tile({ href, title, src, img, fallback }: TileProps) {
+  const base = useMemo(() => normalizeBasePath(src || img), [src, img]);
+  const [path, setPath] = useState(base ? `${base}.jpeg` : "");
+  const [hideImg, setHideImg] = useState(!base);
+
   return (
     <Link
       href={href}
       style={{
-        display: "block",
         position: "relative",
+        display: "block",
+        minHeight: 120,
         borderRadius: 12,
         overflow: "hidden",
         background: fallback,
         color: "white",
-        fontWeight: 600,
+        fontWeight: 700,
         textDecoration: "none",
-        minHeight: 120,
       }}
     >
-      {src && (
+      {!hideImg && path && (
         <Image
-          src={src}
+          src={path}
           alt={title}
           fill
           sizes="200px"
           style={{ objectFit: "cover", opacity: 0.7 }}
+          onError={() => {
+            if (path.endsWith(".jpeg")) setPath(`${base}.jpg`);
+            else setHideImg(true);
+          }}
         />
       )}
-      <span
+
+      {/* label */}
+      <div
         style={{
           position: "absolute",
           inset: 0,
@@ -42,10 +64,22 @@ export default function Tile({ href, title, src, fallback }: TileProps) {
           justifyContent: "center",
           textAlign: "center",
           padding: 8,
+          textShadow: "0 1px 2px rgba(0,0,0,.5)",
         }}
       >
         {title}
-      </span>
+      </div>
+
+      {/* subtle gradient for readability */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.55) 100%)",
+          pointerEvents: "none",
+        }}
+      />
     </Link>
   );
 }
