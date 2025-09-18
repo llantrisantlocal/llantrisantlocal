@@ -18,7 +18,7 @@ export default function DirectoryPage() {
         <Tile
           href="/directory"
           title="Local Directory"
-          img="/tiles/directory"
+          src="/tiles/directory"
           fallback="#0ea5e9"
         />
       </div>
@@ -34,11 +34,11 @@ export default function DirectoryPage() {
           gap: 14,
         }}
       >
-        <Tile href="/directory/cleaning"     title="Cleaning"      img="/tiles/services"  fallback="#22c55e" />
-        <Tile href="/directory/gardening"    title="Gardening"     img="/tiles/services"  fallback="#16a34a" />
-        <Tile href="/directory/trades"       title="Trades"        img="/tiles/services"  fallback="#f59e0b" />
-        <Tile href="/directory/professional" title="Professional"  img="/tiles/services"  fallback="#6366f1" />
-        <Tile href="/ipw-climatech"          title="IPW Climatech" img="/tiles/aircon"    fallback="#14b8a6" />
+        <Tile href="/directory/cleaning"     title="Cleaning"      src="/tiles/services"  fallback="#22c55e" />
+        <Tile href="/directory/gardening"    title="Gardening"     src="/tiles/services"  fallback="#16a34a" />
+        <Tile href="/directory/trades"       title="Trades"        src="/tiles/services"  fallback="#f59e0b" />
+        <Tile href="/directory/professional" title="Professional"  src="/tiles/services"  fallback="#6366f1" />
+        <Tile href="/ipw-climatech"          title="IPW Climatech" src="/tiles/aircon"    fallback="#14b8a6" />
       </div>
     </section>
   );
