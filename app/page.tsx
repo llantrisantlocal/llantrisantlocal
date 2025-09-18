@@ -2,6 +2,21 @@ import Link from "next/link";
 import Image from "next/image";
 import Tile from "./components/Tile";
 
+// Helper for hero background: prefer .jpeg, fallback to .jpg
+function heroImage(base: string) {
+  if (typeof window !== "undefined") {
+    const jpeg = `${base}.jpeg`;
+    const jpg = `${base}.jpg`;
+
+    const img = new Image();
+    img.src = jpeg;
+    if (img.complete || img.width > 0) return jpeg;
+
+    return jpg;
+  }
+  return `${base}.jpeg`;
+}
+
 export default function Home() {
   return (
     <main>
@@ -20,7 +35,7 @@ export default function Home() {
       >
         <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
           <Image
-            src="/tiles/aircon.jpeg"  // hero can stay fixed if you like
+            src={heroImage("/tiles/aircon")}
             alt="Automotive air conditioning"
             fill
             sizes="100vw"
