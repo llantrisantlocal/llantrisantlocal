@@ -1,89 +1,72 @@
-import Image from "next/image";
-import Link from "next/link";
-
-// Hero resolve (jpeg/jpg)
-function resolveHero(base: string) {
-  if (typeof window !== "undefined") {
-    const jpeg = `${base}.jpeg`;
-    const jpg = `${base}.jpg`;
-    const test = new Image();
-    test.src = jpeg;
-    if (test.complete || test.naturalWidth > 0) return jpeg;
-    return jpg;
-  }
-  return `${base}.jpeg`;
-}
-
 export default function IPWClimatechPage() {
-  const hero = resolveHero("/tiles/aircon");
-
   return (
-    <main style={{ padding: 16 }}>
+    <section style={{ padding: 16 }}>
+      {/* Banner with JPEG/JPG fallback */}
       <div
         style={{
           position: "relative",
           height: 180,
           borderRadius: 16,
           overflow: "hidden",
-          marginBottom: 16,
           background: "#000",
+          marginBottom: 16,
         }}
       >
-        {hero ? (
-          <Image
-            src={hero}
-            alt="Automotive A/C controls"
-            fill
-            sizes="100vw"
-            style={{ objectFit: "cover", opacity: 0.55 }}
+        <picture>
+          <source srcSet="/tiles/aircon.jpeg" />
+          <img
+            src="/tiles/aircon.jpg"
+            alt="Automotive A/C control"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              opacity: 0.5,
+              display: "block",
+            }}
           />
-        ) : null}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background:
-              "linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.7) 100%)",
-          }}
-        />
+        </picture>
+
         <h1
           style={{
             position: "absolute",
             left: 16,
-            bottom: 14,
+            bottom: 12,
             margin: 0,
             color: "white",
-            fontSize: 26,
-            fontWeight: 800,
+            fontSize: 28,
+            textShadow: "0 2px 8px rgba(0,0,0,0.6)",
           }}
         >
           IPW Climatech
         </h1>
       </div>
 
-      <p>
-        Mobile <strong>automotive air-conditioning</strong> service covering Llantrisant & nearby:
-        re-gas, leak testing, odour treatment and diagnostics.
-      </p>
-      <p style={{ marginTop: 8 }}>
-        <strong>Coming late November:</strong> domestic split-system installs and maintenance (post-qualification).
+      <p style={{ fontSize: 16, lineHeight: 1.6 }}>
+        Mobile automotive air-conditioning service covering Llantrisant &amp;
+        nearby: re-gas, leak testing, odour treatment and diagnostics.
       </p>
 
-      <Link
+      <p style={{ fontSize: 16, lineHeight: 1.6 }}>
+        <strong>Coming late November:</strong> domestic split-system installs and
+        maintenance (following qualification).
+      </p>
+
+      <a
         href="/contact"
         style={{
           display: "inline-block",
-          marginTop: 12,
           background: "#16a34a",
           color: "white",
-          padding: "10px 14px",
+          padding: "12px 18px",
           borderRadius: 10,
           textDecoration: "none",
           fontWeight: 700,
+          marginTop: 8,
         }}
       >
         Book a service
-      </Link>
-    </main>
+      </a>
+    </section>
   );
 }
