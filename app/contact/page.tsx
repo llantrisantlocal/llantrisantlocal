@@ -1,46 +1,43 @@
-"use client";
+// Force Node.js runtime (needed for nodemailer)
+export const runtime = "nodejs";
 
-import { useState } from "react";
+import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
-export default function Contact() {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [status, setStatus] = useState("");
+export async function POST(req: Request) {
+  try {
+    const { name, email, message, _hp } = await req.json();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    // Honeypot check - if filled, it's spam → silently ignore
+    if (_hp && _hp.trim() !== "") {
+      return NextResponse.json({ success: true });
+    }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus("Sending...");
+    if (!name || !email || !message) {
+      return NextResponse.json({ success: false, error: "Missing fields" });
+    }
 
-    const res = await fetch("/api/send", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
     });
 
-    if (res.ok) {
-      setStatus("✅ Message sent! We'll reply soon.");
-      setFormData({ name: "", email: "", message: "" });
-    } else {
-      setStatus("❌ Something went wrong. Try again.");
-    }
-  };
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER,
+      subject: `New message from ${name}`,
+      text: `From: ${name} <${email}>\n\n${message}`,
+      replyTo: email,
+    });
 
-  return (
-    <section style={{ padding: "2rem" }}>
-      <h1>Contact Us</h1>
-      <p>Fill in the form below to send us a message:</p>
-
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: "1rem", maxWidth: "400px" }}>
-        <input name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} required />
-        <input type="email" name="email" placeholder="Your Email" value={formData.email} onChange={handleChange} required />
-        <textarea name="message" placeholder="Your Message" value={formData.message} onChange={handleChange} rows={5} required />
-        <button type="submit">Send Message</button>
-      </form>
-
-      {status && <p style={{ marginTop: "1rem" }}>{status}</p>}
-    </section>
-  );
+    return NextResponse.json({ success: true });
+  } catch (err: any) {
+    console.error("Email error:", err);
+    return NextResponse.json({ success: false, error: "Failed to send email" });
+  }
 }
