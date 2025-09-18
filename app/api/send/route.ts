@@ -1,5 +1,5 @@
 // Force Node.js runtime (needed for nodemailer)
-export const runtime = "nodejs20.x";
+export const runtime = "nodejs";
 
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
