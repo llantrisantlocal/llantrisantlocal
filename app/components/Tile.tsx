@@ -1,29 +1,19 @@
-import Link from "next/link";
-import Image from "next/image";
+"use client";
 
-type TileProps = {
+import Link from "next/link";
+import NextImage from "next/image";
+import { useState } from "react";
+
+type Props = {
   href: string;
   title: string;
-  img: string;      // base path, e.g. "/tiles/aircon" (NO extension)
-  fallback: string; // solid colour (e.g. "#0ea5e9")
+  imgBase: string;   // e.g. "/tiles/aircon" (NO extension)
+  fallback: string;  // background colour if image fails
 };
 
-// Prefer .jpeg, fallback .jpg. On server we can’t check, so default to .jpeg.
-// If the image isn’t there, the tile still looks fine thanks to the fallback bg + overlay.
-function resolveSrc(base: string) {
-  if (typeof window !== "undefined") {
-    const jpeg = `${base}.jpeg`;
-    const jpg = `${base}.jpg`;
-    const test = new Image();
-    test.src = jpeg;
-    if (test.complete || test.naturalWidth > 0) return jpeg;
-    return jpg;
-  }
-  return `${base}.jpeg`;
-}
-
-export default function Tile({ href, title, img, fallback }: TileProps) {
-  const src = resolveSrc(img);
+export default function Tile({ href, title, imgBase, fallback }: Props) {
+  const [src, setSrc] = useState(`${imgBase}.jpeg`);
+  const [hideImg, setHideImg] = useState(false);
 
   return (
     <Link
@@ -34,22 +24,25 @@ export default function Tile({ href, title, img, fallback }: TileProps) {
         height: 140,
         borderRadius: 12,
         overflow: "hidden",
-        background: fallback, // safe fallback even if image 404s
+        background: fallback,
         color: "white",
         textDecoration: "none",
       }}
     >
-      {/* BG image (won’t intercept clicks) */}
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-        {src ? (
-          <Image
+        {!hideImg && (
+          <NextImage
             src={src}
             alt=""
             fill
             sizes="200px"
             style={{ objectFit: "cover", opacity: 0.6 }}
+            onError={() => {
+              if (src.endsWith(".jpeg")) setSrc(`${imgBase}.jpg`);
+              else setHideImg(true);
+            }}
           />
-        ) : null}
+        )}
         <div
           style={{
             position: "absolute",
