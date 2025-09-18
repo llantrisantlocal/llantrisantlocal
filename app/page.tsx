@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import Tile from "./components/Tile";
 
 export default function Home() {
   return (
@@ -21,7 +20,7 @@ export default function Home() {
         <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
           <Image
             src="/tiles/aircon.jpeg"
-            alt=""
+            alt="Automotive air conditioning"
             fill
             sizes="100vw"
             style={{ objectFit: "cover", opacity: 0.45 }}
@@ -58,7 +57,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TILES */}
+      {/* TEMP TILES - text only, no missing images */}
       <section
         style={{
           padding: "0 16px 24px",
@@ -67,12 +66,24 @@ export default function Home() {
           gap: 16,
         }}
       >
-        <Tile href="/directory" title="Directory" img="/tiles/directory.jpeg" fallback="#0ea5e9" />
-        <Tile href="/services" title="Services" img="/tiles/services.jpeg" fallback="#22c55e" />
-        <Tile href="/deals" title="Deals" img="/tiles/deals.jpeg" fallback="#ef4444" />
-        <Tile href="/contact" title="Contact" img="/tiles/contact.jpeg" fallback="#a78bfa" />
-        <Tile href="/ipw-climatech" title="IPW Climatech" img="/tiles/aircon.jpeg" fallback="#14b8a6" />
+        <Link href="/directory" style={tileStyle}>Directory</Link>
+        <Link href="/services" style={tileStyle}>Services</Link>
+        <Link href="/deals" style={tileStyle}>Deals</Link>
+        <Link href="/contact" style={tileStyle}>Contact</Link>
+        <Link href="/ipw-climatech" style={tileStyle}>IPW Climatech</Link>
       </section>
     </main>
   );
 }
+
+const tileStyle: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  background: "#1a1a1a",
+  color: "white",
+  borderRadius: 12,
+  padding: "20px",
+  fontWeight: "bold",
+  textDecoration: "none",
+};
