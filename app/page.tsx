@@ -2,6 +2,23 @@ import Link from "next/link";
 import Image from "next/image";
 import Tile from "./components/Tile";
 
+// Helper: prefer .jpeg, fallback to .jpg
+function imagePath(base: string) {
+  if (typeof window !== "undefined") {
+    const jpeg = `${base}.jpeg`;
+    const jpg = `${base}.jpg`;
+
+    // quick check: if the jpeg exists, use it
+    const img = new Image();
+    img.src = jpeg;
+    if (img.complete || img.width > 0) return jpeg;
+
+    return jpg;
+  }
+  // server-side just default to jpeg
+  return `${base}.jpeg`;
+}
+
 export default function Home() {
   return (
     <main>
@@ -20,8 +37,8 @@ export default function Home() {
       >
         <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
           <Image
-            src="/tiles/aircon.jpeg"  // ✅ uses the file you already uploaded
-            alt="Automotive air conditioning"
+            src={imagePath("/tiles/aircon")}
+            alt=""
             fill
             sizes="100vw"
             style={{ objectFit: "cover", opacity: 0.45 }}
@@ -58,7 +75,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TILE GRID */}
+      {/* TILES */}
       <section
         style={{
           padding: "0 16px 24px",
@@ -67,16 +84,11 @@ export default function Home() {
           gap: 16,
         }}
       >
-        <Tile href="/directory" title="Directory" fallback="#0ea5e9" />
-        <Tile href="/services" title="Services" fallback="#22c55e" />
-        <Tile href="/deals" title="Deals" fallback="#ef4444" />
-        <Tile href="/contact" title="Contact" fallback="#a78bfa" />
-        <Tile
-          href="/ipw-climatech"
-          title="IPW Climatech"
-          img="/tiles/aircon.jpeg" // ✅ will show your image
-          fallback="#14b8a6"
-        />
+        <Tile href="/directory" title="Directory" img={imagePath("/tiles/directory")} fallback="#0ea5e9" />
+        <Tile href="/services" title="Services" img={imagePath("/tiles/services")} fallback="#22c55e" />
+        <Tile href="/deals" title="Deals" img={imagePath("/tiles/deals")} fallback="#ef4444" />
+        <Tile href="/contact" title="Contact" img={imagePath("/tiles/contact")} fallback="#a78bfa" />
+        <Tile href="/ipw-climatech" title="IPW Climatech" img={imagePath("/tiles/aircon")} fallback="#14b8a6" />
       </section>
     </main>
   );
