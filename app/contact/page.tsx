@@ -3,139 +3,88 @@
 import { useState } from "react";
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-    _hp: "", // honeypot
-  });
-  const [status, setStatus] = useState<null | { ok: boolean; msg: string }>(null);
-  const [submitting, setSubmitting] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState("");
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData._hp) return; // bots
-    setSubmitting(true);
-    setStatus(null);
+    setStatus("Sending...");
 
-    try {
-      const res = await fetch("/api/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name.trim(),
-          email: formData.email.trim(),
-          message: formData.message.trim(),
-        }),
-      });
+    const res = await fetch("/api/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
 
-      if (res.ok) {
-        setStatus({ ok: true, msg: "Message sent! We’ll reply soon." });
-        setFormData({ name: "", email: "", message: "", _hp: "" });
-      } else {
-        setStatus({ ok: false, msg: "Something went wrong. Please try again." });
-      }
-    } catch {
-      setStatus({ ok: false, msg: "Network error. Please try again." });
-    } finally {
-      setSubmitting(false);
+    if (res.ok) {
+      setStatus("✅ Message sent!");
+      setFormData({ name: "", email: "", message: "" });
+    } else {
+      setStatus("❌ Something went wrong. Try again.");
     }
   };
 
   return (
-    <main className="min-h-dvh bg-slate-50">
-      <section className="bg-gradient-to-br from-teal-600 to-cyan-500 text-white">
-        <div className="mx-auto max-w-4xl px-4 py-12 sm:py-16">
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Contact us</h1>
-          <p className="mt-2 text-white/90 max-w-2xl">
-            Have a question or want to list your business? Send us a message and we’ll get back to you.
-          </p>
-        </div>
-      </section>
+    <main className="min-h-dvh bg-slate-50 flex items-center justify-center px-4">
+      <div className="w-full max-w-lg bg-white p-8 rounded-2xl shadow-sm ring-1 ring-slate-200">
+        <h1 className="text-2xl font-bold text-slate-800">Contact us</h1>
+        <p className="mt-2 text-slate-600">
+          Have a question or want to list your business? Send us a message and we’ll get back to you.
+        </p>
 
-      <section className="mx-auto max-w-4xl px-4 -mt-8 pb-16">
-        <form
-          onSubmit={handleSubmit}
-          className="rounded-2xl bg-white p-6 sm:p-8 shadow-sm ring-1 ring-slate-200"
-        >
-          {/* Name */}
-          <label className="block text-sm font-medium text-slate-700">
-            Your name
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-700">Your name</label>
             <input
               name="name"
-              required
               value={formData.name}
               onChange={handleChange}
-              className="mt-1 w-full rounded-lg border-slate-300 px-3 py-2 ring-1 ring-slate-200 focus:outline-none focus:ring-teal-500"
+              required
+              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500"
               placeholder="Jane Doe"
             />
-          </label>
+          </div>
 
-          {/* Email */}
-          <label className="mt-4 block text-sm font-medium text-slate-700">
-            Your email
+          <div>
+            <label className="block text-sm font-medium text-slate-700">Your email</label>
             <input
               type="email"
               name="email"
-              required
               value={formData.email}
               onChange={handleChange}
-              className="mt-1 w-full rounded-lg border-slate-300 px-3 py-2 ring-1 ring-slate-200 focus:outline-none focus:ring-teal-500"
+              required
+              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500"
               placeholder="you@example.com"
             />
-          </label>
+          </div>
 
-          {/* Message */}
-          <label className="mt-4 block text-sm font-medium text-slate-700">
-            Your message
+          <div>
+            <label className="block text-sm font-medium text-slate-700">Your message</label>
             <textarea
               name="message"
-              rows={6}
-              required
               value={formData.message}
               onChange={handleChange}
-              className="mt-1 w-full rounded-lg border-slate-300 px-3 py-2 ring-1 ring-slate-200 focus:outline-none focus:ring-teal-500"
+              required
+              rows={5}
+              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500"
               placeholder="How can we help?"
             />
-          </label>
-
-          {/* Honeypot (hidden) */}
-          <input
-            name="_hp"
-            value={formData._hp}
-            onChange={handleChange}
-            className="hidden"
-            tabIndex={-1}
-            autoComplete="off"
-          />
-
-          <div className="mt-6 flex items-center gap-3">
-            <button
-              type="submit"
-              disabled={submitting}
-              className="inline-flex items-center justify-center rounded-lg bg-teal-600 px-4 py-2 font-medium text-white hover:bg-teal-700 disabled:opacity-60"
-            >
-              {submitting ? "Sending…" : "Send message"}
-            </button>
-
-            {status && (
-              <span
-                className={
-                  "text-sm " + (status.ok ? "text-emerald-700" : "text-rose-700")
-                }
-              >
-                {status.msg}
-              </span>
-            )}
           </div>
+
+          <button
+            type="submit"
+            className="w-full rounded-lg bg-teal-600 px-4 py-2 font-medium text-white hover:bg-teal-700 transition"
+          >
+            Send message
+          </button>
         </form>
-      </section>
+
+        {status && <p className="mt-4 text-sm text-slate-700">{status}</p>}
+      </div>
     </main>
   );
 }
