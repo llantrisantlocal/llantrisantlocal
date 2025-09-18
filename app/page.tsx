@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import Tile from "./components/Tile";
 
 export default function Home() {
   return (
@@ -19,7 +20,7 @@ export default function Home() {
       >
         <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
           <Image
-            src="/tiles/aircon.jpeg"
+            src="/tiles/aircon.jpeg"  // ✅ uses the file you already uploaded
             alt="Automotive air conditioning"
             fill
             sizes="100vw"
@@ -57,7 +58,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TEMP TILES - text only, no missing images */}
+      {/* TILE GRID */}
       <section
         style={{
           padding: "0 16px 24px",
@@ -66,24 +67,17 @@ export default function Home() {
           gap: 16,
         }}
       >
-        <Link href="/directory" style={tileStyle}>Directory</Link>
-        <Link href="/services" style={tileStyle}>Services</Link>
-        <Link href="/deals" style={tileStyle}>Deals</Link>
-        <Link href="/contact" style={tileStyle}>Contact</Link>
-        <Link href="/ipw-climatech" style={tileStyle}>IPW Climatech</Link>
+        <Tile href="/directory" title="Directory" fallback="#0ea5e9" />
+        <Tile href="/services" title="Services" fallback="#22c55e" />
+        <Tile href="/deals" title="Deals" fallback="#ef4444" />
+        <Tile href="/contact" title="Contact" fallback="#a78bfa" />
+        <Tile
+          href="/ipw-climatech"
+          title="IPW Climatech"
+          img="/tiles/aircon.jpeg" // ✅ will show your image
+          fallback="#14b8a6"
+        />
       </section>
     </main>
   );
 }
-
-const tileStyle: React.CSSProperties = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  background: "#1a1a1a",
-  color: "white",
-  borderRadius: 12,
-  padding: "20px",
-  fontWeight: "bold",
-  textDecoration: "none",
-};
