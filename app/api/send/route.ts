@@ -8,10 +8,8 @@ export async function POST(req: Request) {
   try {
     const { name, email, message, _hp } = await req.json();
 
-    // Honeypot check (if bot fills the hidden field, reject silently)
-    if (_hp) {
-      return NextResponse.json({ success: true });
-    }
+    // Honeypot: if bots fill this hidden field, accept silently
+    if (_hp) return NextResponse.json({ success: true });
 
     if (!name || !email || !message) {
       return NextResponse.json({ success: false, error: "Missing fields" });
@@ -39,7 +37,7 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ success: true });
-  } catch (err: any) {
+  } catch (err) {
     console.error("Email error:", err);
     return NextResponse.json({ success: false, error: "Failed to send email" });
   }
