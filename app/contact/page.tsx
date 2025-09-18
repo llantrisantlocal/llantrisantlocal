@@ -2,17 +2,31 @@
 
 import { useState } from "react";
 
-export default function Contact() {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "", _hp: "" });
+export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+    _hp: "", // honeypot field
+  });
+
   const [status, setStatus] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("Sending...");
+
+    // if honeypot filled -> bot
+    if (formData._hp) {
+      setStatus("❌ Spam detected");
+      return;
+    }
 
     const res = await fetch("/api/send", {
       method: "POST",
@@ -33,12 +47,35 @@ export default function Contact() {
       <h1>Contact Us</h1>
       <p>Fill in the form below to send us a message:</p>
 
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: "1rem", maxWidth: "400px" }}>
-        <input name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} required />
-        <input type="email" name="email" placeholder="Your Email" value={formData.email} onChange={handleChange} required />
-        <textarea name="message" placeholder="Your Message" value={formData.message} onChange={handleChange} rows={5} required />
+      <form
+        onSubmit={handleSubmit}
+        style={{ display: "grid", gap: "1rem", maxWidth: "400px" }}
+      >
+        <input
+          name="name"
+          placeholder="Your Name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Your Email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+        <textarea
+          name="message"
+          placeholder="Your Message"
+          value={formData.message}
+          onChange={handleChange}
+          rows={5}
+          required
+        />
 
-        {/* Honeypot field - hidden from users */}
+        {/* Honeypot field (hidden from real users) */}
         <input
           type="text"
           name="_hp"
