@@ -1,28 +1,25 @@
+import Tile from "../components/Tile";
+
 export default function DirectoryPage() {
   return (
-    <>
-      {/* Hero section */}
-      <section
-        className="relative h-64 w-full overflow-hidden rounded-b-2xl"
+    <section style={{ padding: "16px" }}>
+      <h1 style={{ fontSize: 28, margin: "0 0 12px" }}>Directory</h1>
+      <p style={{ marginBottom: 16 }}>
+        Browse local businesses by category. More being added weekly.
+      </p>
+
+      <div
         style={{
-          backgroundImage: "url(/tiles/directory.jpg)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
+          gap: 14,
         }}
       >
-        <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-          <h1 className="text-4xl font-extrabold text-white drop-shadow-lg">
-            Local Directory
-          </h1>
-        </div>
-      </section>
-
-      {/* Page content */}
-      <section style={{ padding: "20px" }}>
-        <p>
-          Browse trusted local businesses and services across Llantrisant.
-        </p>
-      </section>
-    </>
+        <Tile href="/directory/cleaning" title="Cleaning" fallback="#0ea5e9" />
+        <Tile href="/directory/gardening" title="Gardening" fallback="#22c55e" />
+        <Tile href="/directory/trades" title="Trades" fallback="#f59e0b" />
+        <Tile href="/directory/professional" title="Professional" fallback="#6366f1" />
+      </div>
+    </section>
   );
 }
