@@ -5,7 +5,7 @@ export default function IPWClimatechPage() {
       <div
         style={{
           position: "relative",
-          height: 200,
+          height: 220,
           borderRadius: 16,
           overflow: "hidden",
           background: "#000",
@@ -28,15 +28,19 @@ export default function IPWClimatechPage() {
           />
         </picture>
 
+        {/* TITLE with gradient text */}
         <h1
           style={{
             position: "absolute",
+            top: 16,
             left: 16,
-            bottom: 12,
             margin: 0,
-            color: "white",
-            fontSize: 28,
-            textShadow: "0 2px 6px rgba(0,0,0,0.7)",
+            fontSize: 32,
+            fontWeight: "bold",
+            background: "linear-gradient(90deg, #2563eb, #ef4444)", // blue → red
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            textShadow: "0 2px 6px rgba(0,0,0,0.6)",
           }}
         >
           IPW Climatech
@@ -49,53 +53,49 @@ export default function IPWClimatechPage() {
       </p>
 
       <p style={{ fontSize: 16, lineHeight: 1.6 }}>
-        <strong>Coming late November:</strong> domestic split-system installs and maintenance
-        (following qualification).
+        <strong>Coming late November:</strong> domestic split-system installs and
+        maintenance (following qualification).
       </p>
 
       {/* CONTACT BOX */}
       <div
         style={{
           marginTop: 20,
-          padding: "20px",
+          padding: 16,
           borderRadius: 12,
-          background: "linear-gradient(135deg, #1e3a8a, #dc2626)", // blue → red
-          color: "white",
-          textAlign: "center",
+          background: "rgba(37,99,235,0.1)", // light blue backdrop
+          border: "1px solid #2563eb",
         }}
       >
-        <h2 style={{ marginBottom: 12 }}>Book Now</h2>
-        <p style={{ marginBottom: 16 }}>
-          WhatsApp or email us today to book your air-con service.
+        <p style={{ margin: "0 0 8px", fontWeight: "bold" }}>
+          Contact IPW Climatech
         </p>
-
-        {/* WhatsApp Button */}
-        <a
-          href="https://wa.me/442922360467"
-          target="_blank"
-          style={{
-            display: "inline-block",
-            backgroundColor: "#25D366", // WhatsApp green
-            color: "white",
-            padding: "14px 22px",
-            borderRadius: 8,
-            fontWeight: 700,
-            fontSize: 16,
-            textDecoration: "none",
-            marginBottom: 12,
-          }}
-        >
-          💬 Message us on WhatsApp
-        </a>
-
-        {/* Email Link */}
-        <p style={{ margin: "10px 0 0" }}>
+        <p style={{ margin: "4px 0" }}>
           📧{" "}
+          <a href="mailto:ipwclimatech@outlook.com">ipwclimatech@outlook.com</a>
+        </p>
+        <p style={{ margin: "4px 0" }}>
+          💬{" "}
           <a
-            href="mailto:ipwclimatech@outlook.com"
-            style={{ color: "white", fontWeight: 700, textDecoration: "underline" }}
+            href="https://wa.me/442922360467"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: "#16a34a",
+              fontWeight: "bold",
+              textDecoration: "none",
+              transition: "all 0.3s ease",
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.textShadow = "0 0 10px #22c55e";
+              e.currentTarget.style.color = "#22c55e";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.textShadow = "none";
+              e.currentTarget.style.color = "#16a34a";
+            }}
           >
-            ipwclimatech@outlook.com
+            Message us on WhatsApp
           </a>
         </p>
       </div>
@@ -111,10 +111,9 @@ export default function IPWClimatechPage() {
             url: "https://llantrisantlocal.co.uk/ipw-climatech",
             areaServed: ["Llantrisant", "Pontyclun", "Surrounding"],
             serviceType: "Automotive air conditioning",
-            sameAs: [
-              "https://wa.me/442922360467",
-              "mailto:ipwclimatech@outlook.com",
-            ],
+            telephone: "+442922360467",
+            email: "ipwclimatech@outlook.com",
+            sameAs: ["https://wa.me/442922360467"],
             offers: {
               "@type": "Offer",
               priceCurrency: "GBP",
