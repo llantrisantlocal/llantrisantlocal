@@ -1,90 +1,124 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [status, setStatus] = useState("");
+  const [form, setForm] = useState({ name: "", email: "", message: "", company: "", ts: "" });
+  const [status, setStatus] = useState<null | "idle" | "sending" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(() => {
+    // timestamp when form loads (for simple “time to complete” anti-bot check)
+    setForm((f) => ({ ...f, ts: String(Date.now()) }));
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus("Sending...");
+    setStatus("sending");
+    setErrorMsg("");
 
-    const res = await fetch("/api/send", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-
-    if (res.ok) {
-      setStatus("✅ Message sent!");
-      setFormData({ name: "", email: "", message: "" });
-    } else {
-      setStatus("❌ Something went wrong. Try again.");
+    try {
+      const res = await fetch("/api/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const json = await res.json();
+      if (json?.success) {
+        setStatus("success");
+        setForm({ name: "", email: "", message: "", company: "", ts: String(Date.now()) });
+      } else {
+        setStatus("error");
+        setErrorMsg(json?.error ?? "Something went wrong.");
+      }
+    } catch (err: any) {
+      setStatus("error");
+      setErrorMsg("Network error. Please try again.");
     }
   };
 
   return (
-    <main className="min-h-dvh bg-slate-50 flex items-center justify-center px-4">
-      <div className="w-full max-w-lg bg-white p-8 rounded-2xl shadow-sm ring-1 ring-slate-200">
-        <h1 className="text-2xl font-bold text-slate-800">Contact us</h1>
-        <p className="mt-2 text-slate-600">
-          Have a question or want to list your business? Send us a message and we’ll get back to you.
-        </p>
+    <main style={{ padding: 16 }}>
+      <h1 style={{ marginBottom: 8 }}>Contact</h1>
+      <p style={{ marginBottom: 16, color: "#94a3b8" }}>
+        Tell us what you need — we’ll get back quickly.
+      </p>
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-700">Your name</label>
-            <input
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500"
-              placeholder="Jane Doe"
-            />
-          </div>
+      <form onSubmit={submit} style={{ display: "grid", gap: 10, maxWidth: 520 }}>
+        <input
+          name="name"
+          placeholder="Your name"
+          value={form.name}
+          onChange={handleChange}
+          required
+          style={input}
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Your email"
+          value={form.email}
+          onChange={handleChange}
+          required
+          style={input}
+        />
+        <textarea
+          name="message"
+          placeholder="Your message (what do you need?)"
+          value={form.message}
+          onChange={handleChange}
+          rows={6}
+          required
+          style={{ ...input, resize: "vertical" }}
+        />
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700">Your email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500"
-              placeholder="you@example.com"
-            />
-          </div>
+        {/* Honeypot field (bots fill this, humans won't see it) */}
+        <div style={{ position: "absolute", left: -9999, top: -9999 }}>
+          <input
+            tabIndex={-1}
+            autoComplete="off"
+            name="company"
+            value={form.company}
+            onChange={handleChange}
+          />
+        </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700">Your message</label>
-            <textarea
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              required
-              rows={5}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500"
-              placeholder="How can we help?"
-            />
-          </div>
+        <button
+          type="submit"
+          disabled={status === "sending"}
+          style={{
+            background: "white",
+            color: "#111",
+            borderRadius: 10,
+            padding: "10px 14px",
+            fontWeight: 800,
+            cursor: "pointer",
+            opacity: status === "sending" ? 0.6 : 1,
+          }}
+        >
+          {status === "sending" ? "Sending…" : "Send message"}
+        </button>
 
-          <button
-            type="submit"
-            className="w-full rounded-lg bg-teal-600 px-4 py-2 font-medium text-white hover:bg-teal-700 transition"
-          >
-            Send message
-          </button>
-        </form>
-
-        {status && <p className="mt-4 text-sm text-slate-700">{status}</p>}
-      </div>
+        {status === "success" && (
+          <div style={{ color: "#22c55e", fontWeight: 700 }}>✅ Message sent! We’ll reply soon.</div>
+        )}
+        {status === "error" && (
+          <div style={{ color: "#ef4444", fontWeight: 700 }}>❌ {errorMsg}</div>
+        )}
+      </form>
     </main>
   );
 }
+
+const input: React.CSSProperties = {
+  background: "#111",
+  color: "white",
+  border: "1px solid rgba(255,255,255,.15)",
+  borderRadius: 10,
+  padding: "10px 12px",
+  outline: "none",
+};
