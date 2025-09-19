@@ -1,80 +1,87 @@
-"use client";
-
 import Link from "next/link";
-import { useState } from "react";
+import Tile from "./components/Tile";
 
-type TileProps = {
-  href: string;
-  title: string;
-  /** Path without extension, e.g. "/tiles/services" */
-  src?: string;
-  fallback?: string;
-  subtitle?: string;
-};
-
-export default function Tile({ href, title, src, fallback = "#111", subtitle }: TileProps) {
-  const [hovered, setHovered] = useState(false);
-
+export default function Home() {
   return (
-    <Link
-      href={href}
-      style={{ textDecoration: "none" }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <div
+    <main>
+      {/* HERO */}
+      <section
         style={{
           position: "relative",
-          height: 160,
-          borderRadius: 14,
+          minHeight: 240,
+          display: "flex",
+          alignItems: "flex-end",
+          borderRadius: 16,
           overflow: "hidden",
-          background: fallback,
-          color: "white",
-          boxShadow: hovered
-            ? "0 10px 24px rgba(0,0,0,.25)"
-            : "0 6px 16px rgba(0,0,0,.15)",
-          transform: hovered ? "translateY(-2px)" : "translateY(0)",
-          transition: "transform .18s ease, box-shadow .18s ease",
+          margin: 16,
+          background: "#000",
         }}
+        aria-label="Llantrisant Local hero"
       >
-        {src ? (
+        {/* jpeg → jpg fallback */}
+        <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
           <picture>
-            <source srcSet={`${src}.jpeg`} />
+            <source srcSet="/tiles/aircon.jpeg" />
             <img
-              src={`${src}.jpg`}
+              src="/tiles/aircon.jpg"
               alt=""
               style={{
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
+                opacity: 0.45,
                 display: "block",
-                opacity: 0.55,
-                transform: hovered ? "scale(1.04)" : "scale(1)",
-                transition: "transform .25s ease, opacity .25s ease",
               }}
             />
           </picture>
-        ) : null}
-
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background:
-              "linear-gradient(180deg, rgba(0,0,0,.25) 0%, rgba(0,0,0,.65) 100%)",
-            pointerEvents: "none",
-          }}
-        />
-
-        <div style={{ position: "absolute", left: 12, right: 12, bottom: 12 }}>
-          <div style={{ fontSize: 18, fontWeight: 700, lineHeight: 1.2 }}>{title}</div>
-          {subtitle ? (
-            <div style={{ fontSize: 12, opacity: 0.9, marginTop: 2 }}>{subtitle}</div>
-          ) : (
-            <div style={{ fontSize: 12, opacity: 0.9, marginTop: 2 }}>Explore →</div>
-          )}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,.65) 100%)",
+            }}
+          />
         </div>
-      </div>
-    </Link>
+
+        <div style={{ position: "relative", zIndex: 1, padding: 20, color: "white" }}>
+          <h1 style={{ margin: 0, fontSize: 30, lineHeight: 1.2 }}>LLANTRISANT LOCAL</h1>
+          <p style={{ margin: "8px 0 14px", opacity: 0.9 }}>
+            A town that’s built on a hill cannot be hidden.
+          </p>
+          <Link
+            href="/contact"
+            style={{
+              display: "inline-block",
+              background: "white",
+              color: "#111",
+              padding: "10px 14px",
+              borderRadius: 999,
+              fontWeight: 600,
+              textDecoration: "none",
+            }}
+          >
+            Contact Us
+          </Link>
+        </div>
+      </section>
+
+      {/* COLOURFUL GRID */}
+      <section
+        style={{
+          padding: "0 16px 28px",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(170px, 1fr))",
+          gap: 16,
+        }}
+        aria-label="Primary sections"
+      >
+        <Tile href="/directory"     title="Directory"     src="/tiles/directory"     fallback="#0ea5e9" subtitle="Explore →" />
+        <Tile href="/services"      title="Services"      src="/tiles/services"      fallback="#22c55e" subtitle="Explore →" />
+        <Tile href="/deals"         title="Deals"         src="/tiles/deals"         fallback="#ef4444" subtitle="Save now →" />
+        <Tile href="/contact"       title="Contact"       src="/tiles/contact"       fallback="#a78bfa" subtitle="Get in touch →" />
+        <Tile href="/ipw-climatech" title="IPW Climatech" src="/tiles/aircon"        fallback="#14b8a6" subtitle="Book a service →" />
+      </section>
+    </main>
   );
 }
