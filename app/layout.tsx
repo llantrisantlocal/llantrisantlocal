@@ -46,8 +46,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               href="/"
               style={{
                 color: "white",
-                textDecoration: "none",
-                fontWeight: 800,
+                textDecoration: pathname === "/" ? "underline" : "none",
+                fontWeight: pathname === "/" ? 800 : 700,
                 fontSize: 18,
               }}
             >
