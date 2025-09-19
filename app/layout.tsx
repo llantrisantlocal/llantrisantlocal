@@ -1,6 +1,4 @@
-"use client";
-
-import { usePathname } from "next/navigation";
+import Nav from "./components/Nav";
 
 export const metadata = {
   title: "Llantrisant Local",
@@ -8,8 +6,6 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-
   return (
     <html lang="en">
       <body
@@ -21,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           color: "white",
         }}
       >
-        {/* TOP NAV */}
+        {/* TOP NAV (client component inside a server layout is OK) */}
         <header
           style={{
             position: "sticky",
@@ -32,7 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             borderBottom: "1px solid rgba(255,255,255,.08)",
           }}
         >
-          <nav
+          <div
             style={{
               display: "flex",
               alignItems: "center",
@@ -42,24 +38,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               margin: "0 auto",
             }}
           >
-            <a
-              href="/"
-              style={{
-                color: "white",
-                textDecoration: pathname === "/" ? "underline" : "none",
-                fontWeight: pathname === "/" ? 800 : 700,
-                fontSize: 18,
-              }}
-            >
-              Llantrisant Local
-            </a>
-            <div style={{ display: "flex", gap: 14, fontWeight: 600 }}>
-              {navLink("/directory", "Directory", pathname)}
-              {navLink("/services", "Services", pathname)}
-              {navLink("/deals", "Deals", pathname)}
-              {navLink("/contact", "Contact", pathname)}
-            </div>
-          </nav>
+            <Nav />
+          </div>
         </header>
 
         {/* MAIN CONTAINER */}
@@ -82,23 +62,5 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </footer>
       </body>
     </html>
-  );
-}
-
-function navLink(href: string, label: string, pathname: string) {
-  const active = pathname === href;
-  return (
-    <a
-      key={href}
-      href={href}
-      style={{
-        color: "white",
-        textDecoration: active ? "underline" : "none",
-        fontWeight: active ? 700 : 500,
-        opacity: active ? 1 : 0.9,
-      }}
-    >
-      {label}
-    </a>
   );
 }
