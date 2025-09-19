@@ -72,7 +72,12 @@ export default function IPWClimatechPage() {
         </p>
         <p style={{ margin: "4px 0" }}>
           📧{" "}
-          <a href="mailto:ipwclimatech@outlook.com">ipwclimatech@outlook.com</a>
+          <a
+            href="mailto:ipwclimatech@outlook.com"
+            className="email-link"
+          >
+            ipwclimatech@outlook.com
+          </a>
         </p>
         <p style={{ margin: "4px 0" }}>
           💬{" "}
@@ -80,25 +85,36 @@ export default function IPWClimatechPage() {
             href="https://wa.me/442922360467"
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              color: "#16a34a",
-              fontWeight: "bold",
-              textDecoration: "none",
-              transition: "all 0.3s ease",
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.textShadow = "0 0 10px #22c55e";
-              e.currentTarget.style.color = "#22c55e";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.textShadow = "none";
-              e.currentTarget.style.color = "#16a34a";
-            }}
+            className="whatsapp-link"
           >
             Message us on WhatsApp
           </a>
         </p>
       </div>
+
+      {/* Scoped styles for hover glow */}
+      <style jsx>{`
+        .whatsapp-link {
+          color: #16a34a;
+          font-weight: bold;
+          text-decoration: none;
+          transition: all 0.3s ease;
+        }
+        .whatsapp-link:hover {
+          color: #22c55e;
+          text-shadow: 0 0 10px #22c55e;
+        }
+        .email-link {
+          color: #2563eb;
+          font-weight: bold;
+          text-decoration: none;
+          transition: all 0.3s ease;
+        }
+        .email-link:hover {
+          color: #3b82f6;
+          text-shadow: 0 0 10px #3b82f6;
+        }
+      `}</style>
 
       {/* SCHEMA: AutoRepair / Service */}
       <script
