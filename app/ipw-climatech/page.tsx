@@ -1,6 +1,6 @@
 export default function IPWClimatechPage() {
   return (
-    <main style={{ padding: 16 }}>
+    <main id="ipw-climatech-page" style={{ padding: 16 }}>
       {/* HERO */}
       <div
         style={{
@@ -72,10 +72,7 @@ export default function IPWClimatechPage() {
         </p>
         <p style={{ margin: "4px 0" }}>
           📧{" "}
-          <a
-            href="mailto:ipwclimatech@outlook.com"
-            className="email-link"
-          >
+          <a href="mailto:ipwclimatech@outlook.com" className="email-link">
             ipwclimatech@outlook.com
           </a>
         </p>
@@ -92,29 +89,33 @@ export default function IPWClimatechPage() {
         </p>
       </div>
 
-      {/* Scoped styles for hover glow */}
-      <style jsx>{`
-        .whatsapp-link {
-          color: #16a34a;
-          font-weight: bold;
-          text-decoration: none;
-          transition: all 0.3s ease;
-        }
-        .whatsapp-link:hover {
-          color: #22c55e;
-          text-shadow: 0 0 10px #22c55e;
-        }
-        .email-link {
-          color: #2563eb;
-          font-weight: bold;
-          text-decoration: none;
-          transition: all 0.3s ease;
-        }
-        .email-link:hover {
-          color: #3b82f6;
-          text-shadow: 0 0 10px #3b82f6;
-        }
-      `}</style>
+      {/* Scoped styles (server-safe) */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+#ipw-climatech-page .whatsapp-link {
+  color: #16a34a;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all .3s ease;
+}
+#ipw-climatech-page .whatsapp-link:hover {
+  color: #22c55e;
+  text-shadow: 0 0 10px #22c55e;
+}
+#ipw-climatech-page .email-link {
+  color: #2563eb;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all .3s ease;
+}
+#ipw-climatech-page .email-link:hover {
+  color: #3b82f6;
+  text-shadow: 0 0 10px #3b82f6;
+}
+          `,
+        }}
+      />
 
       {/* SCHEMA: AutoRepair / Service */}
       <script
