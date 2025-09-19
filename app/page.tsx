@@ -2,6 +2,9 @@ import Link from "next/link";
 import Tile from "./components/Tile";
 
 export default function Home() {
+  // TODO: replace with your real number (no spaces) for tel / WhatsApp:
+  const phoneE164 = "+44XXXXXXXXXX"; // e.g. +447911123456
+
   return (
     <main>
       {/* HERO */}
@@ -18,9 +21,10 @@ export default function Home() {
         }}
         aria-label="Llantrisant Local hero"
       >
-        {/* jpeg → jpg fallback */}
+        {/* Background image with webp → jpeg → jpg fallback */}
         <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
           <picture>
+            <source type="image/webp" srcSet="/tiles/aircon.webp" />
             <source srcSet="/tiles/aircon.jpeg" />
             <img
               src="/tiles/aircon.jpg"
@@ -49,20 +53,39 @@ export default function Home() {
           <p style={{ margin: "8px 0 14px", opacity: 0.9 }}>
             A town that’s built on a hill cannot be hidden.
           </p>
-          <Link
-            href="/contact"
-            style={{
-              display: "inline-block",
-              background: "white",
-              color: "#111",
-              padding: "10px 14px",
-              borderRadius: 999,
-              fontWeight: 600,
-              textDecoration: "none",
-            }}
-          >
-            Contact Us
-          </Link>
+
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <Link
+              href="/contact"
+              style={{
+                display: "inline-block",
+                background: "white",
+                color: "#111",
+                padding: "10px 14px",
+                borderRadius: 999,
+                fontWeight: 700,
+                textDecoration: "none",
+              }}
+            >
+              Contact Us
+            </Link>
+
+            {/* Phone + WhatsApp CTAs */}
+            <a
+              href={`tel:${phoneE164}`}
+              style={ghostBtn}
+              aria-label="Call now"
+            >
+              Call now
+            </a>
+            <a
+              href={`https://wa.me/${phoneE164.replace("+", "")}`}
+              style={ghostBtn}
+              aria-label="WhatsApp us"
+            >
+              WhatsApp
+            </a>
+          </div>
         </div>
       </section>
 
@@ -82,6 +105,78 @@ export default function Home() {
         <Tile href="/contact"       title="Contact"       src="/tiles/contact"       fallback="#a78bfa" subtitle="Get in touch →" />
         <Tile href="/ipw-climatech" title="IPW Climatech" src="/tiles/aircon"        fallback="#14b8a6" subtitle="Book a service →" />
       </section>
+
+      {/* TESTIMONIALS */}
+      <section style={{ padding: "0 16px 24px" }} aria-label="What locals say">
+        <h2 style={{ fontSize: 18, marginBottom: 8 }}>What locals say</h2>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: 12,
+          }}
+        >
+          {[
+            { q: "Found a great cleaner in 10 minutes!", a: "— Sarah, Llantrisant" },
+            { q: "Booked car A/C regas, super quick.", a: "— Mike, Pontyclun" },
+            { q: "Handy to compare local trades.", a: "— Beth, Brynna" },
+          ].map((t, i) => (
+            <div key={i} style={{ background: "#121212", borderRadius: 12, padding: 14, opacity: 0.95 }}>
+              <p style={{ margin: 0 }}>{t.q}</p>
+              <p style={{ margin: "6px 0 0", opacity: 0.8 }}>{t.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* COVERAGE */}
+      <section style={{ padding: "0 16px 32px", fontSize: 14, color: "#cbd5e1" }}>
+        Serving Llantrisant, Pontyclun, Brynna, Llanharry, Llanharan, Talbot Green, Beddau & nearby.
+      </section>
+
+      {/* LOCALBUSINESS SCHEMA */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            name: "Llantrisant Local",
+            url: "https://llantrisantlocal.co.uk",
+            areaServed: [
+              "Llantrisant",
+              "Pontyclun",
+              "Brynna",
+              "Llanharry",
+              "Llanharan",
+              "Talbot Green",
+              "Beddau",
+            ],
+            image: "https://llantrisantlocal.co.uk/og.jpg",
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Llantrisant",
+              addressRegion: "Rhondda Cynon Taf",
+              addressCountry: "GB",
+            },
+            contactPoint: {
+              "@type": "ContactPoint",
+              contactType: "customer support",
+              telephone: phoneE164,
+            },
+          }),
+        }}
+      />
     </main>
   );
 }
+
+const ghostBtn: React.CSSProperties = {
+  display: "inline-block",
+  padding: "10px 14px",
+  borderRadius: 999,
+  border: "1px solid rgba(255,255,255,.35)",
+  color: "white",
+  textDecoration: "none",
+  fontWeight: 700,
+};
