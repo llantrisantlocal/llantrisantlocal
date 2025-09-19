@@ -53,21 +53,52 @@ export default function IPWClimatechPage() {
         (following qualification).
       </p>
 
-      <a
-        href="/contact"
+      {/* CONTACT BOX */}
+      <div
         style={{
-          display: "inline-block",
-          background: "#16a34a",
+          marginTop: 20,
+          padding: "20px",
+          borderRadius: 12,
+          background: "linear-gradient(135deg, #1e3a8a, #dc2626)", // blue → red
           color: "white",
-          padding: "12px 18px",
-          borderRadius: 10,
-          textDecoration: "none",
-          fontWeight: 700,
-          marginTop: 12,
+          textAlign: "center",
         }}
       >
-        Book a service
-      </a>
+        <h2 style={{ marginBottom: 12 }}>Book Now</h2>
+        <p style={{ marginBottom: 16 }}>
+          WhatsApp or email us today to book your air-con service.
+        </p>
+
+        {/* WhatsApp Button */}
+        <a
+          href="https://wa.me/442922360467"
+          target="_blank"
+          style={{
+            display: "inline-block",
+            backgroundColor: "#25D366", // WhatsApp green
+            color: "white",
+            padding: "14px 22px",
+            borderRadius: 8,
+            fontWeight: 700,
+            fontSize: 16,
+            textDecoration: "none",
+            marginBottom: 12,
+          }}
+        >
+          💬 Message us on WhatsApp
+        </a>
+
+        {/* Email Link */}
+        <p style={{ margin: "10px 0 0" }}>
+          📧{" "}
+          <a
+            href="mailto:ipwclimatech@outlook.com"
+            style={{ color: "white", fontWeight: 700, textDecoration: "underline" }}
+          >
+            ipwclimatech@outlook.com
+          </a>
+        </p>
+      </div>
 
       {/* SCHEMA: AutoRepair / Service */}
       <script
@@ -80,6 +111,10 @@ export default function IPWClimatechPage() {
             url: "https://llantrisantlocal.co.uk/ipw-climatech",
             areaServed: ["Llantrisant", "Pontyclun", "Surrounding"],
             serviceType: "Automotive air conditioning",
+            sameAs: [
+              "https://wa.me/442922360467",
+              "mailto:ipwclimatech@outlook.com",
+            ],
             offers: {
               "@type": "Offer",
               priceCurrency: "GBP",
