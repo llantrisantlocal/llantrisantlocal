@@ -1,9 +1,15 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+
 export const metadata = {
   title: "Llantrisant Local",
   description: "Local directory, services, and deals for Llantrisant & nearby.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
   return (
     <html lang="en">
       <body
@@ -48,10 +54,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               Llantrisant Local
             </a>
             <div style={{ display: "flex", gap: 14, fontWeight: 600 }}>
-              <a href="/directory" style={linkStyle}>Directory</a>
-              <a href="/services"  style={linkStyle}>Services</a>
-              <a href="/deals"     style={linkStyle}>Deals</a>
-              <a href="/contact"   style={linkStyle}>Contact</a>
+              {navLink("/directory", "Directory", pathname)}
+              {navLink("/services", "Services", pathname)}
+              {navLink("/deals", "Deals", pathname)}
+              {navLink("/contact", "Contact", pathname)}
             </div>
           </nav>
         </header>
@@ -79,8 +85,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   );
 }
 
-const linkStyle: React.CSSProperties = {
-  color: "white",
-  textDecoration: "none",
-  opacity: 0.9,
-};
+function navLink(href: string, label: string, pathname: string) {
+  const active = pathname === href;
+  return (
+    <a
+      key={href}
+      href={href}
+      style={{
+        color: "white",
+        textDecoration: active ? "underline" : "none",
+        fontWeight: active ? 700 : 500,
+        opacity: active ? 1 : 0.9,
+      }}
+    >
+      {label}
+    </a>
+  );
+}
