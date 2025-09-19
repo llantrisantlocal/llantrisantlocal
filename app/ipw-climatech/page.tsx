@@ -1,8 +1,7 @@
-// app/ipw-climatech/page.tsx
-
 export default function IPWClimatechPage() {
   return (
     <main style={{ padding: 16 }}>
+      {/* HERO */}
       <div
         style={{
           position: "relative",
@@ -14,6 +13,7 @@ export default function IPWClimatechPage() {
         }}
       >
         <picture>
+          <source type="image/webp" srcSet="/tiles/aircon.webp" />
           <source srcSet="/tiles/aircon.jpeg" />
           <img
             src="/tiles/aircon.jpg"
@@ -44,13 +44,13 @@ export default function IPWClimatechPage() {
       </div>
 
       <p style={{ fontSize: 16, lineHeight: 1.6 }}>
-        Mobile automotive air-conditioning service covering Llantrisant &amp;
-        nearby: re-gas, leak testing, odour treatment and diagnostics.
+        Mobile automotive air-conditioning service covering Llantrisant &amp; nearby:
+        re-gas, leak testing, odour treatment and diagnostics.
       </p>
 
       <p style={{ fontSize: 16, lineHeight: 1.6 }}>
-        <strong>Coming late November:</strong> domestic split-system installs
-        and maintenance (following qualification).
+        <strong>Coming late November:</strong> domestic split-system installs and maintenance
+        (following qualification).
       </p>
 
       <a
@@ -68,6 +68,27 @@ export default function IPWClimatechPage() {
       >
         Book a service
       </a>
+
+      {/* SCHEMA: AutoRepair / Service */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "AutoRepair",
+            name: "IPW Climatech",
+            url: "https://llantrisantlocal.co.uk/ipw-climatech",
+            areaServed: ["Llantrisant", "Pontyclun", "Surrounding"],
+            serviceType: "Automotive air conditioning",
+            offers: {
+              "@type": "Offer",
+              priceCurrency: "GBP",
+              availability: "https://schema.org/InStock",
+            },
+            provider: { "@type": "Organization", name: "IPW Climatech" },
+          }),
+        }}
+      />
     </main>
   );
 }
